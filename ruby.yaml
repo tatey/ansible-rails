@@ -25,10 +25,23 @@
       command: tar -zxf ruby-{{ ruby_version }}.tar.gz chdir=/usr/local/src creates=/usr/local/src/ruby-{{ ruby_version }}
 
     - name: ruby | configure
-      command: ./configure chdir=/usr/local/src/ruby-{{ ruby_version }} creates=/usr/local/src/ruby-{{ ruby_version }}/Makefile
+      command: ./configure --prefix=/opt/ruby-{{ ruby_version }} chdir=/usr/local/src/ruby-{{ ruby_version }} creates=/usr/local/src/ruby-{{ ruby_version }}/Makefile
 
     - name: ruby | make
       command: make chdir=/usr/local/src/ruby-{{ ruby_version }} creates=/usr/local/src/ruby-{{ ruby_version }}/ruby
 
     - name: ruby | install
-      command: make install chdir=/usr/local/src/ruby-{{ ruby_version }} creates=/usr/local/bin/ruby
+      command: make install chdir=/usr/local/src/ruby-{{ ruby_version }} creates=/opt/ruby-{{ ruby_version }}/bin/ruby
+
+    - name: ruby | bundler
+      command: /opt/ruby-{{ ruby_version }}/bin/gem install bundler creates=/opt/ruby-{{ ruby_version }}/bin/bundle"
+
+    - name: ruby | symlink
+      file: path=/usr/local/bin/{{ item }} src=/opt/ruby-{{ ruby_version }}/bin/{{ item }} state=link
+      with_items:
+        - bundle
+        - gem
+        - rake
+        - rdoc
+        - ri
+        - ruby
