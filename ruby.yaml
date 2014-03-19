@@ -1,0 +1,34 @@
+---
+- hosts: all
+  sudo: true
+
+  vars:
+    - ruby_url: http://cache.ruby-lang.org/pub/ruby/2.1/ruby-2.1.1.tar.gz
+    - ruby_version: 2.1.1
+
+  tasks:
+    - name: ruby | install system packages for building
+      apt: pkg={{ item }} state=latest update-cache=yes
+      with_items:
+        - build-essential
+        - libcurl4-openssl-dev
+        - libreadline6-dev
+        - libssl-dev
+        - libxml2-dev
+        - libxslt1-dev
+        - zlib1g-dev
+
+    - name: ruby | download tarball
+      get_url: url={{ ruby_url }} dest=/usr/local/src/ruby-{{ ruby_version }}.tar.gz
+
+    - name: ruby | extract tarball
+      command: tar -zxf ruby-{{ ruby_version }}.tar.gz chdir=/usr/local/src creates=/usr/local/src/ruby-{{ ruby_version }}
+
+    - name: ruby | configure
+      command: ./configure chdir=/usr/local/src/ruby-{{ ruby_version }} creates=/usr/local/src/ruby-{{ ruby_version }}/Makefile
+
+    - name: ruby | make
+      command: make chdir=/usr/local/src/ruby-{{ ruby_version }} creates=/usr/local/src/ruby-{{ ruby_version }}/ruby
+
+    - name: ruby | install
+      command: make install chdir=/usr/local/src/ruby-{{ ruby_version }} creates=/usr/local/bin/ruby
