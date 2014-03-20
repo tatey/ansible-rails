@@ -33,7 +33,7 @@
     - name: ruby | extract tarball
       command: tar -zxf ruby-{{ ruby_version }}.tar.gz
                chdir=/usr/local/src
-               creates=/usr/local/src/ruby-{{ ruby_version }}
+               creates=/usr/local/src/ruby-{{ ruby_version }}/
 
     - name: ruby | configure
       command: ./configure --prefix=/opt/ruby-{{ ruby_version }}
