@@ -9,7 +9,7 @@
 
   tasks:
     - name: ruby | gemrc
-      copy: src=files/gemrc dest=/etc/gemrc
+      copy: src=templates/gemrc dest=/etc/gemrc
 
     - name: ruby | install system packages for building
       apt: pkg={{ item }} state=latest update-cache=yes
