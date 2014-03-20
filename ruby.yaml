@@ -9,10 +9,13 @@
 
   tasks:
     - name: ruby | gemrc
-      copy: src=templates/gemrc dest=/etc/gemrc
+      copy: src=files/gemrc
+            dest=/etc/gemrc
 
-    - name: ruby | install system packages for building
-      apt: pkg={{ item }} state=latest update-cache=yes
+    - name: ruby | build dependencies
+      apt: pkg={{ item }}
+           state=latest
+           update-cache=yes
       with_items:
         - build-essential
         - libcurl4-openssl-dev
@@ -23,25 +26,38 @@
         - zlib1g-dev
 
     - name: ruby | download tarball
-      get_url: url={{ ruby_tarball_url }} dest=/usr/local/src/ruby-{{ ruby_version }}.tar.gz sha256sum={{ ruby_tarball_sha256sum }}
+      get_url: url={{ ruby_tarball_url }}
+               dest=/usr/local/src/ruby-{{ ruby_version }}.tar.gz
+               sha256sum={{ ruby_tarball_sha256sum }}
 
     - name: ruby | extract tarball
-      command: tar -zxf ruby-{{ ruby_version }}.tar.gz chdir=/usr/local/src creates=/usr/local/src/ruby-{{ ruby_version }}
+      command: tar -zxf ruby-{{ ruby_version }}.tar.gz
+               chdir=/usr/local/src
+               creates=/usr/local/src/ruby-{{ ruby_version }}
 
     - name: ruby | configure
-      command: ./configure --prefix=/opt/ruby-{{ ruby_version }} chdir=/usr/local/src/ruby-{{ ruby_version }} creates=/usr/local/src/ruby-{{ ruby_version }}/Makefile
+      command: ./configure --prefix=/opt/ruby-{{ ruby_version }}
+               chdir=/usr/local/src/ruby-{{ ruby_version }}
+               creates=/usr/local/src/ruby-{{ ruby_version }}/Makefile
 
     - name: ruby | make
-      command: make chdir=/usr/local/src/ruby-{{ ruby_version }} creates=/usr/local/src/ruby-{{ ruby_version }}/ruby
+      command: make
+               chdir=/usr/local/src/ruby-{{ ruby_version }}
+               creates=/usr/local/src/ruby-{{ ruby_version }}/ruby
 
-    - name: ruby | install
-      command: make install chdir=/usr/local/src/ruby-{{ ruby_version }} creates=/opt/ruby-{{ ruby_version }}/bin/ruby
+    - name: ruby | make install
+      command: make install
+               chdir=/usr/local/src/ruby-{{ ruby_version }}
+               creates=/opt/ruby-{{ ruby_version }}/bin/ruby
 
     - name: ruby | bundler
-      command: /opt/ruby-{{ ruby_version }}/bin/gem install bundler creates=/opt/ruby-{{ ruby_version }}/bin/bundle"
+      command: /opt/ruby-{{ ruby_version }}/bin/gem install bundler
+               creates=/opt/ruby-{{ ruby_version }}/bin/bundle
 
     - name: ruby | symlink
-      file: path=/usr/local/bin/{{ item }} src=/opt/ruby-{{ ruby_version }}/bin/{{ item }} state=link
+      file: path=/usr/local/bin/{{ item }}
+            src=/opt/ruby-{{ ruby_version }}/bin/{{ item }}
+            state=link
       with_items:
         - bundle
         - gem
