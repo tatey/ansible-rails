@@ -3,7 +3,8 @@
   sudo: true
 
   vars:
-    - ruby_url: http://cache.ruby-lang.org/pub/ruby/2.1/ruby-2.1.1.tar.gz
+    - ruby_tarball_url: http://cache.ruby-lang.org/pub/ruby/2.1/ruby-2.1.1.tar.gz
+    - ruby_tarball_sha256sum: c843df31ae88ed49f5393142b02b9a9f5a6557453805fd489a76fbafeae88941
     - ruby_version: 2.1.1
 
   tasks:
@@ -22,7 +23,7 @@
         - zlib1g-dev
 
     - name: ruby | download tarball
-      get_url: url={{ ruby_url }} dest=/usr/local/src/ruby-{{ ruby_version }}.tar.gz
+      get_url: url={{ ruby_tarball_url }} dest=/usr/local/src/ruby-{{ ruby_version }}.tar.gz sha256sum={{ ruby_tarball_sha256sum }}
 
     - name: ruby | extract tarball
       command: tar -zxf ruby-{{ ruby_version }}.tar.gz chdir=/usr/local/src creates=/usr/local/src/ruby-{{ ruby_version }}
