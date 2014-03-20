@@ -8,10 +8,6 @@
     - ruby_version: 2.1.1
 
   tasks:
-    - name: ruby | gemrc
-      copy: src=files/gemrc
-            dest=/etc/gemrc
-
     - name: ruby | build dependencies
       apt: pkg={{ item }}
            state=latest
@@ -49,6 +45,10 @@
       command: make install
                chdir=/usr/local/src/ruby-{{ ruby_version }}
                creates=/opt/ruby-{{ ruby_version }}/bin/ruby
+
+    - name: ruby | gemrc
+      copy: src=files/gemrc
+            dest=/etc/gemrc
 
     - name: ruby | bundler
       command: /opt/ruby-{{ ruby_version }}/bin/gem install bundler
