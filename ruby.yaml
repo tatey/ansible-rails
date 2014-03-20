@@ -7,6 +7,9 @@
     - ruby_version: 2.1.1
 
   tasks:
+    - name: ruby | gemrc
+      copy: src=files/gemrc dest=/etc/gemrc
+
     - name: ruby | install system packages for building
       apt: pkg={{ item }} state=latest update-cache=yes
       with_items:
