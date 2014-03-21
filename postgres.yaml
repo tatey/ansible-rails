@@ -1,0 +1,23 @@
+---
+- hosts: all
+  sudo: true
+
+  tasks:
+    - name: postgres | python-pycurl
+      apt: pkg=python-pycurl
+           update-cache=yes
+           state=latest
+
+    - name: postgres | repository
+      apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main'
+                      state=present
+
+    - name: postgres | key
+      apt_key: id=ACCC4CF8
+               url=https://www.postgresql.org/media/keys/ACCC4CF8.asc
+               state=present
+
+    - name: postgres | install
+      apt: pkg=postgresql-9.3
+           state=latest
+           update-cache=yes
