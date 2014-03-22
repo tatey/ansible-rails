@@ -55,7 +55,7 @@
                creates=/opt/ruby-{{ ruby_version }}/bin/bundle
 
     - name: ruby | symlink
-      file: path=/usr/local/bin/{{ item }}
+      file: dest=/usr/local/bin/{{ item }}
             src=/opt/ruby-{{ ruby_version }}/bin/{{ item }}
             state=link
       with_items:
