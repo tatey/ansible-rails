@@ -50,6 +50,7 @@
             group=deploy
             groups=ssh
             password={{ deploy_password.stdout }}
+            shell=/bin/bash
             state=present
 
     - name: users | deploy authorized key
