@@ -1,0 +1,4 @@
+production:
+  adapter: postgresql
+  database: <%= ENV["DATABASE_NAME"] %>
+  username: <%= ENV["DATABASE_USER"] %>

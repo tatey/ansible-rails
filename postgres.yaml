@@ -2,11 +2,18 @@
 - hosts: all
   sudo: true
 
+  vars:
+    postgres_database: hires
+    postgres_user: rails
+
   tasks:
-    - name: postgres | python-pycurl
-      apt: pkg=python-pycurl
+    - name: postgres | install dependencies
+      apt: pkg={{ item }}
            update-cache=yes
            state=latest
+      with_items:
+        - python-pycurl
+        - python-psycopg2
 
     - name: postgres | repository
       apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main'
@@ -18,6 +25,44 @@
                state=present
 
     - name: postgres | install
-      apt: pkg=postgresql-9.3
+      apt: pkg={{ item }}
            state=latest
            update-cache=yes
+      with_items:
+        - postgresql-9.3
+        - postgresql-server-dev-9.3
+
+    - name: postgres | database name env var
+      lineinfile: dest=/home/deploy/.profile
+                  regexp="^export DATABASE_NAME"
+                  line="export DATABASE_NAME={{ postgres_database }}"
+                  state=present
+
+    - name: postgres | database user env var
+      lineinfile: dest=/home/deploy/.profile
+                  regexp="^export DATABASE_USERNAME"
+                  line="export DATABASE_USERNAME={{ postgres_user }}"
+                  state=present
+
+    - name: postgres | database password env var
+      lineinfile: dest=/home/deploy/.profile
+                  regexp="^export DATABASE_PASSWORD"
+                  line="export DATABASE_PASSWORD={{ postgres_pass }}"
+                  state=present
+
+- hosts: all
+  sudo: true
+  sudo_user: postgres
+
+  vars:
+    postgres_database: hires
+    postgres_user: rails
+
+  tasks:
+    - name: postgres | database
+      postgresql_db: name={{ postgres_database }}
+                     state=present
+
+    - name: postgres | privileges
+      postgresql_user: login=deploy
+                       state=present
