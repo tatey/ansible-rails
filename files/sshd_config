@@ -25,6 +25,9 @@ IgnoreRhosts yes
 RhostsRSAAuthentication no
 HostbasedAuthentication no
 
+# SFTP
+Subsystem sftp /usr/lib/openssh/sftp-server
+
 # Death of the connection or crash of one of the machines will be
 # properly noticed.
 TCPKeepAlive yes
