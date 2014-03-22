@@ -1,0 +1,30 @@
+---
+- hosts: all
+  sudo: true
+
+  vars:
+    app_dir: '/srv/apps/hires'
+
+  tasks:
+    - name: app | git
+      apt: pkg=git-core
+           update-cache=yes
+           state=latest
+
+    - name: app | shared dirs
+      file: path={{ app_dir }}/shared/{{ item }}
+            state=directory
+      with_items:
+        - config
+        - log
+        - public/system
+        - tmp/cache
+        - tmp/pids
+        - tmp/sockets
+        - vendor/bundle
+
+    - name: app | modes
+      shell: chmod 755 -R {{ app_dir }}
+
+    - name: app | owners
+      shell: chown deploy:deploy -R {{ app_dir }}
