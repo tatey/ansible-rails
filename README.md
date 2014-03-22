@@ -3,10 +3,14 @@ Bootstrap Vagrant
     vagrant init vagrant init hashicorp/precise32
     vagrant up
 
-Install Ruby
+Add users and configure SSH
 
-    ansible-playbook -i hosts --private-key=~/.vagrant.d/insecure_private_key -u vagrant ruby.yaml
+    ansible-playbook -i hosts --private-key=~/.vagrant.d/insecure_private_key -u vagrant users.yaml
 
-Install Nginx
+Initialize application directory for Capistrano.
 
-    ansible-playbook -i hosts --private-key=~/.vagrant.d/insecure_private_key -u vagrant nginx.yaml
+    ansible-playbook -i hosts -u devop app.yaml
+
+Install Ruby.
+
+    ansible-playbook -i hosts -u devop ruby.yaml
