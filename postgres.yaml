@@ -33,6 +33,10 @@
             dest=/etc/postgresql/9.3/main/pg_hba.conf
       notify: restart postgresql
 
+    - name: postgres | start on boot
+      service: name=postgresql
+               enabled=yes
+
   handlers:
     - name: restart postgresql
       service: name=postgresql
