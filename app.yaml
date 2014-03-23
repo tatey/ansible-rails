@@ -4,7 +4,6 @@
 
   vars:
     app_dir: '/srv/apps/hires'
-    app_secret: 'bb255856ab9d8e1061b03060489bd96c4504c5ca2010d8507447355b72ec55e6fdf00524ad60e8ea47d974d978bce221b451e6bbafcf5baddb2b33e59b359a9a'
 
   tasks:
     - name: app | git
@@ -33,9 +32,3 @@
 
     - name: app | owners
       shell: chown deploy:deploy -R {{ app_dir }}
-
-    - name: app | app secret env var
-      lineinfile: dest=/home/deploy/.profile
-                  regexp="^export APP_SECRET"
-                  line="export APP_SECRET={{ app_secret }}"
-                  state=present

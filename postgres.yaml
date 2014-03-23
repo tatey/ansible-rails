@@ -2,10 +2,6 @@
 - hosts: all
   sudo: true
 
-  vars:
-    postgres_database: hires
-    postgres_user: rails
-
   tasks:
     - name: postgres | install dependencies
       apt: pkg={{ item }}
@@ -32,37 +28,22 @@
         - postgresql-9.3
         - postgresql-server-dev-9.3
 
-    - name: postgres | database name env var
-      lineinfile: dest=/home/deploy/.profile
-                  regexp="^export DATABASE_NAME"
-                  line="export DATABASE_NAME={{ postgres_database }}"
-                  state=present
-
-    - name: postgres | database user env var
-      lineinfile: dest=/home/deploy/.profile
-                  regexp="^export DATABASE_USERNAME"
-                  line="export DATABASE_USERNAME={{ postgres_user }}"
-                  state=present
-
-    - name: postgres | database password env var
-      lineinfile: dest=/home/deploy/.profile
-                  regexp="^export DATABASE_PASSWORD"
-                  line="export DATABASE_PASSWORD={{ postgres_pass }}"
-                  state=present
-
 - hosts: all
   sudo: true
   sudo_user: postgres
-
-  vars:
-    postgres_database: hires
-    postgres_user: rails
 
   tasks:
     - name: postgres | database
       postgresql_db: name={{ postgres_database }}
                      state=present
 
-    - name: postgres | privileges
-      postgresql_user: login=deploy
+    - name: postgres | role
+      postgresql_user: name={{ postgres_username }}
                        state=present
+
+    - name: postgres | privileges
+      postgresql_privs: database={{ postgres_database }}
+                        privs=ALL
+                        type=database
+                        role={{ postgres_username }}
+                        state=present
