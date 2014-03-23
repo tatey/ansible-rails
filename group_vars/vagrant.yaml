@@ -2,4 +2,4 @@
 postgres_database: hires
 postgres_username: deploy
 app_secret: 9fc5d9b1bd1e1341443a7e9bd366b3c8aefe6979b10a91d9ae3d10457d28dbf510cbe41960ce4a11d63e45617b184c5256346118aa8d9c0f5c9d4b23c395d7fb
-app_dir: /srv/app/hires
+app_dir: /srv/apps/hires

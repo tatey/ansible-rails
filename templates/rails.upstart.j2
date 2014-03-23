@@ -1,0 +1,12 @@
+description "rails"
+
+start on runlevel [2345]
+stop on runlevel [016]
+
+setuid deploy
+setgid deploy
+
+respawn
+
+chdir {{ app_dir }}/current
+exec source /home/deploy/.profile && {{ app_dir }}/current/bin/unicorn -c {{ app_dir }}/current/config/unicorn.rb -E production -D

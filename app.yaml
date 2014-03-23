@@ -29,3 +29,10 @@
 
     - name: app | owners
       shell: chown deploy:deploy -R {{ app_dir }}
+
+    - name: app | upstart
+      template: src=templates/rails.upstart.j2
+                dest=/etc/init/rails.conf
+                owner=root
+                group=root
+                mode=644
