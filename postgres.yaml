@@ -28,6 +28,16 @@
         - postgresql-9.3
         - postgresql-server-dev-9.3
 
+    - name: postgres | pg_hba.conf
+      copy: src=files/pg_hba.conf
+            dest=/etc/postgresql/9.3/main/pg_hba.conf
+      notify: restart postgresql
+
+  handlers:
+    - name: restart postgresql
+      service: name=postgresql
+               state=restarted
+
 - hosts: all
   sudo: true
   sudo_user: postgres
