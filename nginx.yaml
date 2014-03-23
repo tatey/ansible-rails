@@ -42,9 +42,36 @@
                chdir=/usr/local/src/nginx-{{ nginx_version }}
                creates=/opt/nginx-{{ nginx_version }}
 
+    - name: nginx | unprivileged group
+      group: name=nginx
+             state=present
+
+    - name: nginx | unprivileged user
+      user: name=nginx
+            group=nginx
+            createhome=no
+            state=present
+
     - name: nginx | copy nginx init script
       template: src=templates/nginx.init.j2
                 dest=/etc/init.d/nginx
                 mode=0655
                 owner=root
                 group=root
+
+    - name: nginx | copy nginx conf
+      template: src=templates/nginx.conf.j2
+                dest=/etc/nginx/nginx.conf
+                mode=0644
+                owner=root
+                group=root
+      notify: restart nginx
+
+    - name: nginx | start on boot
+      service: name=nginx
+               enabled=yes
+
+  handlers:
+    - name: restart nginx
+      service: name=nginx
+               state=restarted

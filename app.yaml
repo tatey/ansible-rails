@@ -2,9 +2,6 @@
 - hosts: all
   sudo: true
 
-  vars:
-    app_dir: '/srv/apps/hires'
-
   tasks:
     - name: app | git
       apt: pkg=git-core
