@@ -55,7 +55,7 @@ cmd () {
       echo >&2 "Not running"
       ;;  
     restart|reload)
-      sig USR2 && sleep $RESTART_SLEEP && oldsig QUIT && echo "Killing old master" `cat $OLD_PID` && return
+      sig USR2 && sleep $UNICORN_RESTART_SLEEP && oldsig QUIT && echo "Killing old master" `cat $UNICORN_OLD_PID` && return
       echo >&2 "Couldn't reload, starting '$CMD' instead"
       $CMD
       ;;  

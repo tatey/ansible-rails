@@ -1,2 +1,2 @@
-# Deploy user can start, stop and restart rails
-deploy ALL=(root)NOPASSWD:/sbin/start rails,/sbin/stop rails,/sbin/restart rails,/sbin/status rails
+# Deploy user can start, stop and restart unicorn
+deploy ALL=(ALL) NOPASSWD: /etc/init.d/unicorn
