@@ -50,3 +50,7 @@
                 owner=root
                 group=root
                 mode=644
+
+    - name: app | start on boot
+      service: name=unicorn
+               enabled=yes
