@@ -5,7 +5,7 @@
   tasks:
     - name: env_vars | env
       template: src=templates/env.j2
-                dest={{ app_dir }}/current/.env
+                dest={{ app_dir }}/shared/.env
                 owner=deploy
                 group=deploy
                 mode=644
