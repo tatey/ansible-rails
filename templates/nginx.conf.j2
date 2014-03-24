@@ -47,7 +47,7 @@ http {
 
     # Prefer to serve static files directly from nginx to avoid unnecessary
     # data copies from the application server.
-    try_files $uri/index.html $uri.html $uri @app;
+    try_files $uri/index.html $uri.html $uri @unicorn;
 
     location @unicorn {
       # an HTTP header important enough to have its own Wikipedia entry:
