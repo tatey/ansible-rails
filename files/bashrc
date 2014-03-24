@@ -1,2 +1,0 @@
-# Source environment variables from the login shell
-. ~/.profile

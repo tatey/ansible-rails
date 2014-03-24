@@ -3,10 +3,9 @@
   sudo: true
 
   tasks:
-    - name: env_vars | profile
-      template: src=templates/profile.j2
-                dest=/home/deploy/.profile
-
-    - name: ruby | bashrc
-      copy: src=files/bashrc
-            dest=/home/deploy/.bashrc
+    - name: env_vars | env
+      template: src=templates/env.j2
+                dest={{ app_dir }}/current/.env
+                owner=deploy
+                group=deploy
+                mode=644

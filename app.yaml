@@ -30,9 +30,23 @@
     - name: app | owners
       shell: chown deploy:deploy -R {{ app_dir }}
 
-    - name: app | upstart
-      template: src=templates/rails.upstart.j2
-                dest=/etc/init/rails.conf
+    - name: app | unicorn init
+      template: src=files/unicorn.sh
+                dest=/etc/init.d/unicorn
+                owner=root
+                group=root
+                mode=655
+
+    - name: app | unicorn conf dir
+      file: dest=/etc/unicorn
+            owner=root
+            group=root
+            mode=655
+            state=directory
+
+    - name: app | unicorn conf file
+      template: src=templates/unicorn.conf.j2
+                dest=/etc/unicorn/rails.conf
                 owner=root
                 group=root
                 mode=644

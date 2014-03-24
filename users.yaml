@@ -53,6 +53,13 @@
             shell=/bin/bash
             state=present
 
+    - name: users | sudoers
+      copy: src=files/deploy.sudoers
+            dest=/etc/sudoers.d/deploy
+            owner=root
+            group=root
+            mode=440
+
     - name: users | deploy authorized key
       authorized_key: user=deploy
                       key="{{ lookup('file', deploy_ssh_public_key_path) }}"
