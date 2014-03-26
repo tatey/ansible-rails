@@ -1,2 +1,0 @@
-# Deploy user can start, stop and restart unicorn
-deploy ALL=(ALL) NOPASSWD: /etc/init.d/unicorn

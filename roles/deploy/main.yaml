@@ -9,30 +9,30 @@
 
   tasks:
     - name: deploy | deploy group
-      group: name=deploy
+      group: name={{ deploy_username }}
              state=present
 
-    - name: deploy | deploy generate random password
+    - name: deploy | generate random password
       shell: openssl rand -base64 24
       register: deploy_password
 
     - name: deploy | deploy user
       user: name=deploy
-            group=deploy
+            group={{ deploy_username }}
             groups=ssh
             password={{ deploy_password.stdout }}
             shell=/bin/bash
             state=present
 
-    - name: deploy | sudoers
-      copy: src=files/deploy.sudoers
-            dest=/etc/sudoers.d/deploy
+    - name: deploy | deploy sudoer
+      copy: src=files/sudoers
+            dest=/etc/sudoers.d/{{ deploy_username }}
             owner=root
             group=root
             mode=440
 
     - name: deploy | deploy authorized key
-      authorized_key: user=deploy
+      authorized_key: user={{ deploy_username }}
                       key="{{ lookup('file', deploy_ssh_public_key_path) }}"
                       state=present
 
@@ -41,8 +41,8 @@
            update-cache=yes
            state=latest
 
-    - name: deploy | shared dirs
-      file: path={{ app_dir }}/shared/{{ item }}
+    - name: deploy | app dir
+      file: path={{ deploy_app_dir }}/shared/{{ item }}
             state=directory
       with_items:
         - config
@@ -53,15 +53,12 @@
         - tmp/sockets
         - vendor/bundle
 
-    - name: deploy | database.yaml
+    - name: deploy | app database.yaml
       copy: src=files/database.yml
-            dest={{ app_dir }}/shared/config/database.yml
+            dest={{ deploy_app_dir }}/shared/config/database.yml
 
-    - name: deploy | modes
-      shell: chmod 755 -R {{ app_dir }}
-
-    - name: deploy | owners
-      shell: chown deploy:deploy -R {{ app_dir }}
+    - name: deploy | app permissions
+    shell: chmod 755 -R {{ deploy_app_dir }}; chown {{ deploy_username }}:{{ deploy_username }} -R {{ deploy_app_dir }}
 
     - name: deploy | unicorn init
       template: src=files/unicorn.sh
@@ -77,17 +74,18 @@
             mode=655
             state=directory
 
-    - name: deploy | unicorn conf file
+    - name: deploy | unicorn conf
       template: src=templates/unicorn.conf.j2
                 dest=/etc/unicorn/rails.conf
                 owner=root
                 group=root
                 mode=644
 
-    - name: deploy | start on boot
+    - name: deploy | unicorn starts on boot
       service: name=unicorn
                enabled=yes
 
+# TODO
 # nodjs
 # nginx sites available
 # nginx sites enabled
@@ -97,15 +95,15 @@
   sudo_user: postgres
 
   tasks:
-    - name: deploy | database
+    - name: deploy | app database
       postgresql_db: name={{ postgres_database }}
                      state=present
 
-    - name: deploy | role
+    - name: deploy | app role
       postgresql_user: name={{ postgres_username }}
                        state=present
 
-    - name: deploy | privileges
+    - name: deploy | app privileges
       postgresql_privs: database={{ postgres_database }}
                         privs=ALL
                         type=database

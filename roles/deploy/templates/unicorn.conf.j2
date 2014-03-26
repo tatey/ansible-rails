@@ -1,9 +1,9 @@
 RAILS_ENV=production
-RAILS_ROOT={{ app_dir }}/current
+RAILS_ROOT={{ deploy_app_dir }}/current
 UNICORN_CMD="$RAILS_ROOT/bin/unicorn"
 UNICORN_CONFIG="$RAILS_ROOT/config/unicorn.rb"
 UNICORN_LOG=$RAILS_ROOT/log/unicorn.log
 UNICORN_PID=$RAILS_ROOT/tmp/pids/unicorn.pid
 UNICORN_SOCKET=$RAILS_ROOT/tmp/sockets/unicorn.sock
-UNICORN_USER="deploy"
+UNICORN_USER={{ deploy_username }}
 UNICORN_RESTART_SLEEP=5

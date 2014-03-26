@@ -32,7 +32,7 @@ http {
              application/atom+xml;
 
   upstream unicorn {
-    server unix:{{ app_dir }}/current/tmp/sockets/unicorn.sock fail_timeout=0;
+    server unix:{{ deploy_app_dir }}/current/tmp/sockets/unicorn.sock fail_timeout=0;
   }
 
   server {
@@ -43,7 +43,7 @@ http {
     keepalive_timeout 5;
 
     # path for static files
-    root {{ app_dir }}/current/public;
+    root {{ deploy_app_dir }}/current/public;
 
     # Prefer to serve static files directly from nginx to avoid unnecessary
     # data copies from the application server.
@@ -68,7 +68,9 @@ http {
     # rails error pages
     error_page 500 502 503 504 /500.html;
     location = /500.html {
-      root {{ app_dir }}/current/public;
+      root {{ deploy_app_dir }}/current/public;
     }
   }
 }
+
+# TODO Split out sites from conf
