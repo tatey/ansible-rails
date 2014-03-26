@@ -98,6 +98,5 @@
   sudo_user: postgres
 
 # TODO
-# nodjs
 # nginx sites available
 # nginx sites enabled
