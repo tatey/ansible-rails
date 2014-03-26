@@ -1,0 +1,113 @@
+---
+- hosts: all
+  sudo: true
+
+  vars_prompt:
+    - name: deploy_ssh_public_key_path
+      prompt: "SSH public key path for deploy user"
+      default: ~/.ssh/id_rsa.pub
+
+  tasks:
+    - name: deploy | deploy group
+      group: name=deploy
+             state=present
+
+    - name: deploy | deploy generate random password
+      shell: openssl rand -base64 24
+      register: deploy_password
+
+    - name: deploy | deploy user
+      user: name=deploy
+            group=deploy
+            groups=ssh
+            password={{ deploy_password.stdout }}
+            shell=/bin/bash
+            state=present
+
+    - name: deploy | sudoers
+      copy: src=files/deploy.sudoers
+            dest=/etc/sudoers.d/deploy
+            owner=root
+            group=root
+            mode=440
+
+    - name: deploy | deploy authorized key
+      authorized_key: user=deploy
+                      key="{{ lookup('file', deploy_ssh_public_key_path) }}"
+                      state=present
+
+    - name: deploy | git
+      apt: pkg=git-core
+           update-cache=yes
+           state=latest
+
+    - name: deploy | shared dirs
+      file: path={{ app_dir }}/shared/{{ item }}
+            state=directory
+      with_items:
+        - config
+        - log
+        - public/system
+        - tmp/cache
+        - tmp/pids
+        - tmp/sockets
+        - vendor/bundle
+
+    - name: deploy | database.yaml
+      copy: src=files/database.yml
+            dest={{ app_dir }}/shared/config/database.yml
+
+    - name: deploy | modes
+      shell: chmod 755 -R {{ app_dir }}
+
+    - name: deploy | owners
+      shell: chown deploy:deploy -R {{ app_dir }}
+
+    - name: deploy | unicorn init
+      template: src=files/unicorn.sh
+                dest=/etc/init.d/unicorn
+                owner=root
+                group=root
+                mode=655
+
+    - name: deploy | unicorn conf dir
+      file: dest=/etc/unicorn
+            owner=root
+            group=root
+            mode=655
+            state=directory
+
+    - name: deploy | unicorn conf file
+      template: src=templates/unicorn.conf.j2
+                dest=/etc/unicorn/rails.conf
+                owner=root
+                group=root
+                mode=644
+
+    - name: deploy | start on boot
+      service: name=unicorn
+               enabled=yes
+
+# nodjs
+# nginx sites available
+# nginx sites enabled
+
+- hosts: all
+  sudo: true
+  sudo_user: postgres
+
+  tasks:
+    - name: deploy | database
+      postgresql_db: name={{ postgres_database }}
+                     state=present
+
+    - name: deploy | role
+      postgresql_user: name={{ postgres_username }}
+                       state=present
+
+    - name: deploy | privileges
+      postgresql_privs: database={{ postgres_database }}
+                        privs=ALL
+                        type=database
+                        role={{ postgres_username }}
+                        state=present

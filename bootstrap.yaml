@@ -1,0 +1,44 @@
+---
+- hosts: all
+  sudo: true
+
+  vars_prompt:
+    - name: devop_ssh_public_key_path
+      prompt: "SSH public key path for devop user"
+      default: ~/.ssh/id_rsa.pub
+
+  tasks:
+    - name: bootstrap | ssh group
+      group: name=ssh
+             state=present
+
+    - name: bootstrap | devop group
+      group: name=devop
+             state=present
+
+    - name: bootstrap | devop generate random password
+      shell: openssl rand -base64 24
+      register: devop_password
+
+    - name: bootstrap | devop user
+      user: name=devop
+            group=devop
+            groups=admin,ssh
+            password={{ devop_password.stdout }}
+            shell=/bin/bash
+            state=present
+
+    - name: bootstrap | devop authorized key
+      authorized_key: user=devop
+                      key="{{ lookup('file', devop_ssh_public_key_path) }}"
+                      state=present
+
+    - name: bootstrap | sshd config
+      copy: src=files/sshd_config
+            dest=/etc/ssh/sshd_config
+      notify:
+        - restart ssh
+
+  handlers:
+    - name: restart ssh
+      service: name=ssh state=restarted

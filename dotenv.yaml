@@ -3,7 +3,7 @@
   sudo: true
 
   tasks:
-    - name: env_vars | env
+    - name: dotenv | env
       template: src=templates/env.j2
                 dest={{ app_dir }}/shared/.env
                 owner=deploy

@@ -41,23 +41,3 @@
     - name: restart postgresql
       service: name=postgresql
                state=restarted
-
-- hosts: all
-  sudo: true
-  sudo_user: postgres
-
-  tasks:
-    - name: postgres | database
-      postgresql_db: name={{ postgres_database }}
-                     state=present
-
-    - name: postgres | role
-      postgresql_user: name={{ postgres_username }}
-                       state=present
-
-    - name: postgres | privileges
-      postgresql_privs: database={{ postgres_database }}
-                        privs=ALL
-                        type=database
-                        role={{ postgres_username }}
-                        state=present
