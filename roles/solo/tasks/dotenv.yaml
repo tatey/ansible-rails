@@ -1,0 +1,7 @@
+---
+- name: dotenv | env
+  template: src=dotenv.j2
+            dest={{ deploy_app_dir }}/shared/.env
+            owner={{ deploy_username }}
+            group={{ deploy_username }}
+            mode=644

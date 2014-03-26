@@ -1,0 +1,63 @@
+---
+- name: nginx | build dependencies
+  apt: pkg={{ item }}
+       state=latest
+       update-cache=yes
+  with_items:
+    - build-essential
+    - libpcre3-dev
+    - libssl-dev
+
+- name: nginx | download tarball
+  get_url: url={{ nginx_tarball_url }}
+           dest=/usr/local/src/nginx-{{ nginx_version }}.tar.gz
+           sha256sum={{ nginx_tarball_sha256sum }}
+
+- name: nginx | extract tarball
+  command: tar -zxf nginx-{{ nginx_version }}.tar.gz
+           chdir=/usr/local/src
+           creates=/usr/local/src/nginx-{{ nginx_version }}
+
+- name: nginx | configure
+  command: ./configure --prefix=/opt/nginx-{{ nginx_version }} --conf-path=/etc/nginx/nginx.conf --pid-path=/run/nginx.pid --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-http_ssl_module
+           chdir=/usr/local/src/nginx-{{ nginx_version }}
+           creates=/usr/local/src/nginx-{{ nginx_version }}/Makefile
+
+- name: nginx | make
+  command: make
+           chdir=/usr/local/src/nginx-{{ nginx_version }}
+           creates=/usr/local/src/nginx-{{ nginx_version }}/nginx
+
+- name: nginx | make install
+  command: make install
+           chdir=/usr/local/src/nginx-{{ nginx_version }}
+           creates=/opt/nginx-{{ nginx_version }}
+
+- name: nginx | unprivileged group
+  group: name=nginx
+         state=present
+
+- name: nginx | unprivileged user
+  user: name=nginx
+        group=nginx
+        createhome=no
+        state=present
+
+- name: nginx | copy nginx init script
+  template: src=nginx.init.j2
+            dest=/etc/init.d/nginx
+            mode=0655
+            owner=root
+            group=root
+
+- name: nginx | copy nginx conf
+  template: src=nginx.conf.j2
+            dest=/etc/nginx/nginx.conf
+            mode=0644
+            owner=root
+            group=root
+  notify: restart nginx
+
+- name: nginx | start on boot
+  service: name=nginx
+           enabled=yes

@@ -2,11 +2,6 @@
 - hosts: all
   sudo: true
 
-  vars_prompt:
-    - name: devop_ssh_public_key_path
-      prompt: "SSH public key path for devop user"
-      default: ~/.ssh/id_rsa.pub
-
   tasks:
     - name: bootstrap | ssh group
       group: name=ssh
@@ -34,7 +29,7 @@
                       state=present
 
     - name: bootstrap | sshd config
-      copy: src=files/sshd_config
+      copy: src=roles/bootstrap/files/sshd_config
             dest=/etc/ssh/sshd_config
       notify:
         - restart ssh

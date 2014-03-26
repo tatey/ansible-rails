@@ -1,0 +1,7 @@
+---
+- include: ufw.yaml
+- include: postgres.yaml
+- include: ruby.yaml
+- include: nginx.yaml
+- include: deploy.yaml
+- include: dotenv.yaml tags=dotenv

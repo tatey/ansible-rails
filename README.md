@@ -1,24 +1,27 @@
-Bootstrap Vagrant
+# Ansible
 
-    vagrant init vagrant init hashicorp/precise32
-    vagrant up
+Manage a solo server for ruby on rails on a computer of your choice.
 
-Users and SSH
+## Usage
 
-    ansible-playbook -i hosts --private-key=~/.vagrant.d/insecure_private_key -u vagrant users.yaml
+### Vagrant
 
-Application directory
+    $ vagrant init vagrant init hashicorp/precise32
+    $ vagrant up
 
-    ansible-playbook -i hosts -u devop app.yaml
+### Bootstrap
 
-Environment variables
+Create a devop user with your public key and lock down ssh.
 
-    ansible-playbook -i hosts -u devop env_vars.yaml
+    $ ansible-playbook -i vagrant --private-key=~/.vagrant.d/insecure_private_key -u vagrant bootstrap.yaml
 
-Ruby
+### Solo
 
-    ansible-playbook -i hosts -u devop ruby.yaml
+Create a deploy user, configure init scripts, install ruby, install
+postgres, install nginx and configure a firewall.
 
-PostgreSQL
+    $ ansible-playbook -i vagrant -u devop solo.yaml
 
-    ansible-playbook -i hosts -u devop postgres.yaml
+Configure dotenv without running the rest of the playbook.
+
+    $ ansible-playbook -i vagrant -u devop solo.yaml --tags "dotenv"

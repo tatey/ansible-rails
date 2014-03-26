@@ -1,0 +1,8 @@
+---
+nginx_tarball_url: http://nginx.org/download/nginx-1.4.7.tar.gz
+nginx_tarball_sha256sum: 23b8ff4a76817090678f91b0efbfcef59a93492f6612dc8370c44c1f1ce1b626
+nginx_version: 1.4.7
+
+ruby_tarball_url: http://cache.ruby-lang.org/pub/ruby/2.1/ruby-2.1.1.tar.gz
+ruby_tarball_sha256sum: c843df31ae88ed49f5393142b02b9a9f5a6557453805fd489a76fbafeae88941
+ruby_version: 2.1.1

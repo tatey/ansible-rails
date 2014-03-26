@@ -1,6 +1,8 @@
 ---
 deploy_app_dir: /srv/app
 deploy_app_secret: 9fc5d9b1bd1e1341443a7e9bd366b3c8aefe6979b10a91d9ae3d10457d28dbf510cbe41960ce4a11d63e45617b184c5256346118aa8d9c0f5c9d4b23c395d7fb
+deploy_ssh_public_key_path: ~/.ssh/id_rsa.pub
 deploy_username: deploy
+devop_ssh_public_key_path: ~/.ssh/id_rsa.pub
 postgres_database: app
 postgres_username: deploy

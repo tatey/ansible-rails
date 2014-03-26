@@ -1,2 +1,6 @@
 ---
-# TODO
+- hosts: all
+  sudo: true
+
+  roles:
+    - solo
