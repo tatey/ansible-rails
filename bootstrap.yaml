@@ -3,6 +3,13 @@
   sudo: true
 
   tasks:
+    - name: bootstrap | disable root
+      shell: passwd -l root
+
+    - name: bootstrap | admin group
+      group: name=admin
+             state=present
+
     - name: bootstrap | ssh group
       group: name=ssh
              state=present
@@ -27,6 +34,13 @@
       authorized_key: user=devop
                       key="{{ lookup('file', devop_ssh_public_key_path) }}"
                       state=present
+
+    - name: bootstrap | sudoers
+      copy: src=roles/bootstrap/files/sudoers
+            dest=/etc/sudoers
+            mode=440
+            owner=root
+            group=root
 
     - name: bootstrap | sshd config
       copy: src=roles/bootstrap/files/sshd_config
