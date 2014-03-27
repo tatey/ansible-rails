@@ -1,0 +1,8 @@
+---
+deploy_app_dir: /srv/apps/hires
+deploy_app_secret: 7f6017a029c7fc94fb09d92d5ee3795aafeacb49ef3c89b2d6dfd4196da7fe55ad5538a0c8352e2729cdbf06917fe45aa12f319c4052d1595eb2bd68d90ae037
+deploy_ssh_public_key_path: ~/.ssh/id_rsa.pub
+deploy_username: deploy
+devop_ssh_public_key_path: ~/.ssh/id_rsa.pub
+postgres_database: hires
+postgres_username: deploy
