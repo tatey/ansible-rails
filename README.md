@@ -13,6 +13,10 @@ Manage a solo server for ruby on rails on a computer of your choice.
 
 Create a devop user with your public key and lock down ssh.
 
+    $ ansible-playbook -i staging -u root -k bootstrap.yaml
+
+Or
+
     $ ansible-playbook -i vagrant --private-key=~/.vagrant.d/insecure_private_key -u vagrant bootstrap.yaml
 
 ### Solo
