@@ -54,9 +54,6 @@
 - name: deploy | app dir and file permissions
   shell: chmod 755 -R {{ deploy_app_dir }}; chown {{ deploy_username }}:{{ deploy_username }} -R {{ deploy_app_dir }}
 
-- name: deploy | app socket permissions
-  shell: touch {{ deploy_app_dir }}/shared/tmp/sockets/unicorn.sock; chmod 775 {{ deploy_app_dir }}/shared/tmp/sockets/unicorn.sock; chown {{ deploy_username }}:nginx {{ deploy_app_dir }}/shared/tmp/sockets/unicorn.sock
-
 - name: deploy | unicorn init
   copy: src=unicorn.sh
         dest=/etc/init.d/unicorn
