@@ -27,12 +27,13 @@
                   key="{{ lookup('file', deploy_ssh_public_key_path) }}"
                   state=present
 
-- name: deploy | git, nodejs
+- name: deploy | git, imagemagick, nodejs
   apt: pkg={{ item }}
        update-cache=yes
        state=latest
   with_items:
     - git-core
+    - imagemagick
     - nodejs
 
 - name: deploy | app dir
