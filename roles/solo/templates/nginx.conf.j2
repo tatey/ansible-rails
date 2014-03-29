@@ -8,6 +8,9 @@ events {
 }
 
 http {
+  # server header will not include the nginx version.
+  server_tokens off;
+
   # nginx will find this file in the config directory set at nginx build time
   include mime.types;
 
