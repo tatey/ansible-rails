@@ -56,7 +56,7 @@
   shell: chmod 755 -R {{ deploy_app_dir }}; chown {{ deploy_username }}:{{ deploy_username }} -R {{ deploy_app_dir }}
 
 - name: deploy | app socket permissions
-  shell: if test ! -S /srv/apps/hires/repo; then chmod 777 {{ deploy_app_dir }}/shared/tmp/sockets/unicorn.sock; chown {{ deploy_username }}:{{ deploy_username }} {{ deploy_app_dir }}/shared/tmp/sockets/unicorn.sock; fi
+  shell: if test -S {{ deploy_app_dir }}/shared/tmp/sockets/unicorn.sock; then chmod 777 {{ deploy_app_dir }}/shared/tmp/sockets/unicorn.sock; chown {{ deploy_username }}:{{ deploy_username }} {{ deploy_app_dir }}/shared/tmp/sockets/unicorn.sock; fi
 
 - name: deploy | unicorn init
   copy: src=unicorn.sh
