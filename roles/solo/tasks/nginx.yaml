@@ -43,6 +43,18 @@
         createhome=no
         state=present
 
+- name: nginx | proxy cache path
+  file: path=/var/cache/nginx/proxy
+        owner=nginx
+        group=nginx
+        state=directory
+
+- name: nginx | proxy temp path
+  file: path=/var/tmp/nginx/proxy
+        owner=nginx
+        group=nginx
+        state=directory
+
 - name: nginx | copy nginx init script
   template: src=nginx.init.j2
             dest=/etc/init.d/nginx

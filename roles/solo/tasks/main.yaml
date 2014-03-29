@@ -3,6 +3,6 @@
 - include: ntp.yaml
 - include: postgres.yaml
 - include: ruby.yaml
-- include: nginx.yaml
+- include: nginx.yaml tags=nginx
 - include: deploy.yaml tags=deploy
 - include: dotenv.yaml tags=dotenv
