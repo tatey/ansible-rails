@@ -19,7 +19,7 @@ An example `Vagrantfile` is included in this repository.
 
 ## Usage
 
-Ansible expects you to have verified the SSH fingerprints of the hosts
+[Ansible][4] expects you to have verified the SSH fingerprints of the hosts
 you're managing.
 
     $ ssh-keyscan staging.example.com >> ~/.ssh/known_hosts
@@ -86,3 +86,4 @@ license. See LICENSE.
 [1]: http://www.vagrantup.com/
 [2]: https://www.binarylane.com.au/
 [3]: https://digitalocean.com/
+[4]: http://www.ansible.com/
