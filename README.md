@@ -11,6 +11,8 @@ Manage a solo server for ruby on rails on a computer of your choice.
 
 ### Bootstrap
 
+    $ ssh-keyscan example1.foo.net >> ~/.ssh/known_hosts
+
 Create a devop user with your public key and lock down ssh.
 
     $ ansible-playbook -i staging -u root -k bootstrap.yaml
@@ -29,3 +31,5 @@ postgres, install nginx and configure a firewall.
 Configure dotenv without running the rest of the playbook.
 
     $ ansible-playbook -i vagrant -u devop solo.yaml --tags "dotenv"
+
+Ansible 1.5.3.
