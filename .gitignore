@@ -1,2 +1,4 @@
-inventories/staging
+group_vars/production.yaml
+group_vars/staging.yaml
 inventories/production
+inventories/staging
