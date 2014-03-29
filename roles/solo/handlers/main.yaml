@@ -2,3 +2,4 @@
 - include: nginx.yaml
 - include: ntp.yaml
 - include: postgres.yaml
+- include: ufw.yaml

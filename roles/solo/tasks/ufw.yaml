@@ -18,6 +18,7 @@
 
 - name: ufw | enable
   shell: echo 'y' | ufw enable
+  notify: restart ufw
 
 - name: ufw | start on boot
   service: name=ufw
