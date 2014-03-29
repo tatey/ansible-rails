@@ -1,35 +1,52 @@
-# Ansible
+# Ansible Playbooks for Ruby on Rails
 
-Manage a solo server for ruby on rails on a computer of your choice.
+Provision and manage a solo server suitable for deploying a Ruby on Rails
+application. High level components include:
+
+* Ruby
+* PostgreSQL
+* Nginx
+* Unicorn init scripts
+* Capistrano directories
+
+These playbooks have been tested against Vagrant, Binary Lane and
+DigitalOcean. They strive to be idempotent, meaning you can confidently
+run them again and again to ensure your servers are consistent.
+
+An example `Vagrantfile` is included in this repository.
 
 ## Usage
 
-### Vagrant
+Ansible expects you to have verified the SSH fingerprints of the hosts
+you're managing.
 
-    $ vagrant init vagrant init hashicorp/precise32
-    $ vagrant up
+    $ ssh-keyscan staging.example.com >> ~/.ssh/known_hosts
 
-### Bootstrap
-
-    $ ssh-keyscan example1.foo.net >> ~/.ssh/known_hosts
-
-Create a devop user with your public key and lock down ssh.
+Run the bootstrap.yaml playbook as root. This will lock the root account, create
+a devop user with sudo access using your SSH public key and restrict SSH
+access to users in the ssh group.
 
     $ ansible-playbook -i staging -u root -k bootstrap.yaml
 
-Or
+Run the solo.yaml playblock as devop. This will create a deploy user, configure
+init scripts, a firewall, ntp, ruby, postgres, nginx, dotenv, and a
+capistrano directory.
 
-    $ ansible-playbook -i vagrant --private-key=~/.vagrant.d/insecure_private_key -u vagrant bootstrap.yaml
+    $ ansible-playbook -i staging -u devop solo.yaml
 
-### Solo
+If you want to change dotenv variables without running the rest of the solo.yaml
+playbook you can filter tasks using tags.
 
-Create a deploy user, configure init scripts, install ruby, install
-postgres, install nginx and configure a firewall.
+    $ ansible-playbook -i staging -u devop solo.yaml --tags "dotenv"
 
-    $ ansible-playbook -i vagrant -u devop solo.yaml
+From now on you should always run playbooks as the devop user.
 
-Configure dotenv without running the rest of the playbook.
+## Configuration
 
-    $ ansible-playbook -i vagrant -u devop solo.yaml --tags "dotenv"
+The two most important pieces of configuration are inventory files and
+group variables.
 
-Ansible 1.5.3.
+## License and Copyright
+
+Copyright © 2014 Tate Johnson (http://tatey.com). Released under the MIT
+license. See LICENSE.
