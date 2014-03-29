@@ -51,6 +51,7 @@
         state=link
   with_items:
     - bundle
+    - irb
     - gem
     - rake
     - rdoc
