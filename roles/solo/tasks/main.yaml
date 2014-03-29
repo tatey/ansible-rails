@@ -1,5 +1,6 @@
 ---
 - include: ufw.yaml
+- include: ntp.yaml
 - include: postgres.yaml
 - include: ruby.yaml
 - include: nginx.yaml

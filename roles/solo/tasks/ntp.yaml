@@ -1,0 +1,13 @@
+---
+- name: ntp | install
+  apt: pkg=ntp
+       update-cache=yes
+       state=latest
+
+- name: ntp | config
+  copy: src=ntp.conf
+        dest=/etc/ntp.conf
+        mode=644
+        owner=root
+        group=root
+  notify: restart ntp
