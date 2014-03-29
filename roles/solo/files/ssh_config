@@ -1,0 +1,11 @@
+# Default
+Host *
+    SendEnv LANG LC_*
+    HashKnownHosts yes
+    GSSAPIAuthentication yes
+    GSSAPIDelegateCredentials no
+
+# Outgoing connections on port 25 is blocked. Force port 443 for GitHub.
+Host github.com
+  Hostname ssh.github.com
+  Port 443
