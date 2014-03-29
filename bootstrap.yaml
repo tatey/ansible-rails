@@ -48,6 +48,9 @@
       notify:
         - restart ssh
 
+    - name: bootstrap | python-apt
+      shell: apt-get install python-apt -y
+
   handlers:
     - name: restart ssh
       service: name=ssh state=restarted
