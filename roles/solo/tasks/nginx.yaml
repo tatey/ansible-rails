@@ -19,7 +19,7 @@
            creates=/usr/local/src/nginx-{{ nginx_version }}
 
 - name: nginx | configure
-  command: ./configure --prefix=/opt/nginx-{{ nginx_version }} --conf-path=/etc/nginx/nginx.conf --pid-path=/run/nginx.pid --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-http_ssl_module
+  command: ./configure --prefix=/opt/nginx-{{ nginx_version }} --conf-path=/etc/nginx/nginx.conf --pid-path=/run/nginx.pid --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-http_ssl_module --with-http_gzip_static_module
            chdir=/usr/local/src/nginx-{{ nginx_version }}
            creates=/usr/local/src/nginx-{{ nginx_version }}/Makefile
 

@@ -32,16 +32,11 @@ http {
 
   # gzip compression
   gzip on;
-  gzip_http_version 1.0;
   gzip_proxied any;
   gzip_min_length 500;
   gzip_disable "MSIE [1-6]\.";
-  gzip_types text/plain text/html text/xml text/css
-             text/comma-separated-values
-             text/javascript text/json
-             application/x-javascript
-             application/javascript application/json
-             application/atom+xml;
+  gzip_vary on;
+  gzip_types text/plain text/css text/javascript application/x-javascript application/javascript application/json;
 
   upstream unicorn {
     server unix:{{ deploy_app_dir }}/current/tmp/sockets/unicorn.sock fail_timeout=0;
@@ -57,9 +52,13 @@ http {
     # path for static files
     root {{ deploy_app_dir }}/current/public;
 
-    # Prefer to serve static files directly from nginx to avoid unnecessary
-    # data copies from the application server.
     try_files $uri/index.html $uri.html $uri @unicorn;
+
+    location ~ ^/(assets)/  {
+      gzip_static on;
+      expires max;
+      add_header Cache-Control public;
+    }
 
     location @unicorn {
       proxy_cache default;
