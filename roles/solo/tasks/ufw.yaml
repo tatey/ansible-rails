@@ -1,4 +1,9 @@
 ---
+- name: ufw | install
+  apt: pkg=ufw
+       update-cache=yes
+       state=latest
+
 - name: ufw | deny incoming
   shell: ufw default deny incoming
 
@@ -13,3 +18,7 @@
 
 - name: ufw | enable
   shell: echo 'y' | ufw enable
+
+- name: ufw | start on boot
+  service: name=ufw
+           enabled=yes
